@@ -79,7 +79,11 @@ def embed_talking_album(request):
         "width": width,
         "height": height
     })
-    return HttpResponse(response, content_type="application/json")
+    content_type = "application/json"
+    if request.GET.get("callback"):
+        response = "{0}({1})".format(request.GET["callback"], response)
+        content_type = "application/javascript"
+    return HttpResponse(response, content_type=content_type)
 
 def embed_talking_album_detail(request, id=None):
     album = get_object_or_404(Album, id=id)
