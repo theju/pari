@@ -8,6 +8,8 @@ from pari.album.views import AlbumDetail, AlbumList, AlbumImageDetail, ImageColl
 urlpatterns = patterns('pari.album.views',
                        url(r'^$', AlbumList.as_view(), {'albums': get_all_albums}, name='album-list'),
                        url(r'^talking/$', AlbumList.as_view(), {'albums': get_talking_albums}, name='talking-album-list'),
+                       url(r'^talking/embed/$', 'embed_talking_album', name='embed-talking-album'),
+                       url(r'^talking/embed/(?P<id>\d+)/$', 'embed_talking_album_detail', name='embed-talking-album-detail'),
                        url(r'^other/$', AlbumList.as_view(), {'albums': get_other_albums}, name='other-album-list'),
 
                        url(r'^(?P<slug>.+)/$', AlbumDetail.as_view(), name='album-detail'),

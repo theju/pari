@@ -13,11 +13,24 @@
 
 {% block extra_uncompressed_js %}
     <script src="//connect.soundcloud.com/sdk.js"></script>
+    {% if embed %}
+    <script type="text/javascript">
+      $(function() {
+	  Album.init();
+	  $(".album-controls").trigger("click");
+      });
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% block extra_css %}
     <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/magnific-popup.css" charset="utf-8">
     <link type="text/less" rel="stylesheet" href="{{ STATIC_URL }}css/album.less" charset="utf-8">
+    <style>
+      .mfp-container .mfp-figure .mfp-close {
+          display: none;
+      }
+    </style>
 {% endblock %}
 
 {% block main %}
