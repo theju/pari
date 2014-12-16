@@ -5,9 +5,9 @@
 	holder.innerHTML = data.html;
     }
     window.pariAlbumParseResponse = cb;
-    sc.src = "//pari.tld/albums/talking/embed/?url=" + encodeURIComponent(__pariAlbum.url)
-	+  "&width=" + __pariAlbum.widgetWidth
-	+  "&height=" + __pariAlbum.widgetHeight +
-	"  &&callback=pariAlbumParseResponse";
+    sc.src = "//www.ruralindiaonline.org/albums/talking/embed/?url=" + encodeURIComponent(__pariAlbum.url)
+	+ "&width=" + __pariAlbum.widgetWidth
+	+ "&height=" + __pariAlbum.widgetHeight
+	+ "&callback=pariAlbumParseResponse";
     document.body.appendChild(sc);
 })();
