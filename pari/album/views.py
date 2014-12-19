@@ -85,6 +85,7 @@ def embed_talking_album(request):
         content_type = "application/javascript"
     return HttpResponse(response, content_type=content_type)
 
+
 def embed_talking_album_detail(request, id=None):
     album = get_object_or_404(Album, id=id)
     return render(request, "album/album_detail.html", {
