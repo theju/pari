@@ -287,10 +287,8 @@ class FeedTests(TestCase):
 
     def test_feeds_all(self):
         all_feed_request = self.request_factory.get('/feeds/all/')
-        article_feed_request = self.request_factory.get('/feeds/articles/')
 
         feeds = AllFeed()
-        article_feeds = ArticleFeed()
 
         response = feeds(all_feed_request)
         self.assertEqual(response["Content-Type"], "application/rss+xml; charset=utf-8")
@@ -302,6 +300,13 @@ class FeedTests(TestCase):
                          "Updates on the PARI site over the past {0} days".format(days_ago))
         self.assertEqual(len(root.find("channel").findall("item")), 0)
 
+    def test_feeds_article(self):
+        all_feed_request = self.request_factory.get('/feeds/all/')
+        article_feed_request = self.request_factory.get('/feeds/articles/')
+
+        feeds = AllFeed()
+        article_feeds = ArticleFeed()
+
         Article.objects.create(title="Test Article 1", user=self.user, author=self.author)
         response = feeds(all_feed_request)
         root = ET.fromstring(response.content)
@@ -310,10 +315,20 @@ class FeedTests(TestCase):
         response = article_feeds(article_feed_request)
         root = ET.fromstring(response.content)
         self.assertEqual(root.find("channel").find("title").text, "PARI article feed")
+        days_ago = settings.FEED_GENERATION_DAYS
         self.assertEqual(root.find("channel").find("description").text,
                          "Article updates on the PARI site over the past {0} days".format(days_ago))
         self.assertEqual(len(root.find("channel").findall("item")), 1)
 
+    def test_feeds_newspost(self):
+        all_feed_request = self.request_factory.get('/feeds/all/')
+
+        feeds = AllFeed()
+
+        Article.objects.create(title="Test Article 1", user=self.user, author=self.author)
+        response = feeds(all_feed_request)
+        root = ET.fromstring(response.content)
+        self.assertEqual(len(root.find("channel").findall("item")), 1)
         NewsPost.objects.create(title="Test NP 1", user=self.user)
         response = feeds(all_feed_request)
         root = ET.fromstring(response.content)
