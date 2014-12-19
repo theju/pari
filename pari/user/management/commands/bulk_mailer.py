@@ -6,6 +6,7 @@ from mezzanine.pages.models import Page
 
 import csv
 
+
 class Command(BaseCommand):
     args = "<csv_file_path>"
     help = "Send mails on the CSV file"
