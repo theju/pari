@@ -18,6 +18,7 @@ class Contact(models.Model):
     def __unicode__(self):
         return "{0} : {1}".format(self.name, self.email)
 
+
 def save_contact_to_db(sender, **kwargs):
     request = sender
     if request.page.slug not in ["contact-us", "contribute"]:
