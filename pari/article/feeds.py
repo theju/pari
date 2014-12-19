@@ -1,6 +1,8 @@
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed, Rss201rev2Feed
 from django.utils import timezone
+from django.shortcuts import render
+
 from mezzanine.conf import settings
 
 from .models import Article
@@ -146,3 +148,7 @@ class NewsPostFeed(BaseFeed):
     def items(self):
         x_days_ago = timezone.now() - datetime.timedelta(days=self.days_ago)
         return NewsPost.objects.filter(publish_date__gte=x_days_ago)
+
+
+def feeds_list_page(request):
+    return render(request, "feeds/feeds_list.html", {})
