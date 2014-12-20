@@ -17,12 +17,16 @@ class Command(BaseCommand):
         conn = get_connection()
         contact_page = Page.objects.get(slug="contact-us")
         from_email = contact_page.form.email_from
+        subject_tmpl = Template("")
+        body_tmpl = Template("")
         for row in dr:
-            body = Template(row["message"]).render(Context(row))
-            subject = Template(row["subject"]).render(Context(row))
+            if row["message"]:
+                body_tmpl = Template(row["message"])
+            if row["subject"]:
+                subject_tmpl = Template(row["subject"])
             kwargs = {
-                "subject": subject,
-                "body": body,
+                "subject": subject_tmpl.render(Context(row)),
+                "body": body_tmpl.render(Context(row)),
                 "from_email": from_email,
                 "to": [row["to"]],
                 "connection": conn
