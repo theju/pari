@@ -2,6 +2,7 @@ from django.test import TestCase, RequestFactory
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from mezzanine.core.models import CONTENT_STATUS_DRAFT
 from mezzanine.conf import settings
@@ -9,6 +10,7 @@ from mezzanine.conf import settings
 import factory
 from mock import patch
 from geoposition import Geoposition
+import datetime
 
 from .admin import ArticleAdmin
 from .models import Article, Location, Type, Category, Author
@@ -325,7 +327,8 @@ class FeedTests(TestCase):
 
         feeds = AllFeed()
 
-        Article.objects.create(title="Test Article 1", user=self.user, author=self.author)
+        Article.objects.create(title="Test Article 1",
+                               user=self.user, author=self.author)
         response = feeds(all_feed_request)
         root = ET.fromstring(response.content)
         self.assertEqual(len(root.find("channel").findall("item")), 1)
@@ -333,3 +336,52 @@ class FeedTests(TestCase):
         response = feeds(all_feed_request)
         root = ET.fromstring(response.content)
         self.assertEqual(len(root.find("channel").findall("item")), 2)
+
+    def test_feeds_content_type(self):
+        all_feed_request = self.request_factory.get("/feeds/all/")
+
+        feeds = AllFeed()
+        response = feeds(all_feed_request)
+        self.assertEqual(response["Content-Type"],
+                         "application/rss+xml; charset=utf-8")
+
+        all_feed_request = self.request_factory.get(
+            "/feeds/all/",
+            HTTP_ACCEPT="application/rss+xml"
+        )
+
+        feeds = AllFeed()
+        response = feeds(all_feed_request)
+        self.assertEqual(response["Content-Type"],
+                         "application/rss+xml; charset=utf-8")
+
+        request_factory = RequestFactory()
+        all_feed_request = request_factory.get(
+            "/feeds/all/",
+            HTTP_ACCEPT="application/atom+xml"
+        )
+        feeds = AllFeed()
+        response = feeds(all_feed_request)
+        self.assertEqual(response["Content-Type"],
+                         "application/atom+xml; charset=utf-8")
+
+    def test_feeds_beyond_threshold_days(self):
+        all_feed_request = self.request_factory.get('/feeds/all/')
+
+        feeds = AllFeed()
+
+        Article.objects.create(title="Test Article 1",
+                               user=self.user, author=self.author)
+        response = feeds(all_feed_request)
+        root = ET.fromstring(response.content)
+        self.assertEqual(len(root.find("channel").findall("item")), 1)
+
+        article = Article.objects.create(title="Test Article 2",
+                                         user=self.user, author=self.author)
+        today = timezone.now()
+        days_since = settings.FEED_GENERATION_DAYS + 1
+        article.publish_date = today - datetime.timedelta(days=days_since)
+        article.save()
+        response = feeds(all_feed_request)
+        root = ET.fromstring(response.content)
+        self.assertEqual(len(root.find("channel").findall("item")), 1)
