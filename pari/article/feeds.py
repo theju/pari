@@ -21,11 +21,18 @@ class BaseFeed(Feed):
         super(BaseFeed, self).__init__(*args, **kwargs)
 
     def __call__(self, request, *args, **kwargs):
-        accept_header = request.META.get("HTTP_ACCEPT", "")
-        if accept_header.find("application/atom+xml") >= 0:
-            self.feed_type = Atom1Feed
+        feed_format = request.GET.get("format")
+        if feed_format:
+            if feed_format == "atom":
+                self.feed_type = Atom1Feed
+            else:
+                self.feed_type = Rss201rev2Feed
         else:
-            self.feed_type = Rss201rev2Feed
+            accept_header = request.META.get("HTTP_ACCEPT", "")
+            if accept_header.find("application/atom+xml") >= 0:
+                self.feed_type = Atom1Feed
+            else:
+                self.feed_type = Rss201rev2Feed
         return super(BaseFeed, self).__call__(request, *args, **kwargs)
 
     def item_pubdate(self, item):

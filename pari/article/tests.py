@@ -365,6 +365,32 @@ class FeedTests(TestCase):
         self.assertEqual(response["Content-Type"],
                          "application/atom+xml; charset=utf-8")
 
+    def test_feeds_format(self):
+        all_feed_request = self.request_factory.get("/feeds/all/")
+
+        feeds = AllFeed()
+        response = feeds(all_feed_request)
+        self.assertEqual(response["Content-Type"],
+                         "application/rss+xml; charset=utf-8")
+
+        all_feed_request = self.request_factory.get(
+            "/feeds/all/?format=rss"
+        )
+
+        feeds = AllFeed()
+        response = feeds(all_feed_request)
+        self.assertEqual(response["Content-Type"],
+                         "application/rss+xml; charset=utf-8")
+
+        request_factory = RequestFactory()
+        all_feed_request = request_factory.get(
+            "/feeds/all/?format=atom"
+        )
+        feeds = AllFeed()
+        response = feeds(all_feed_request)
+        self.assertEqual(response["Content-Type"],
+                         "application/atom+xml; charset=utf-8")
+
     def test_feeds_beyond_threshold_days(self):
         all_feed_request = self.request_factory.get('/feeds/all/')
 
