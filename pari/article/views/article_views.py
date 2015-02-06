@@ -12,6 +12,7 @@ from pari.article.templatetags.article_filters import month_name
 # TODO: Remove in django 1.7+
 LANGUAGE_SESSION_KEY = "django_language"
 
+
 class ArticleDetail(DetailView):
     context_object_name = "blog_post"
     model = Article
