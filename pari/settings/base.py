@@ -279,7 +279,7 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 # or "C:/www/django/templates".
 # Always use forward slashes, even on Windows.
 # Don't forget to use absolute paths, not relative paths.
-TEMPLATE_DIRS = PROJECT_ROOT.child("templates")
+TEMPLATE_DIRS = (PROJECT_ROOT.child("templates"), )
 
 FIXTURE_DIRS = PROJECT_ROOT.child("fixtures")
 
