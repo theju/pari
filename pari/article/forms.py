@@ -12,21 +12,25 @@ class DisplayableForm(forms.ModelForm):
 class LocationForm(DisplayableForm):
     class Meta:
         model = Location
+        exclude = ()
 
 
 class CategoryForm(DisplayableForm):
     class Meta:
         model = Category
+        exclude = ()
 
 
 class TypeForm(forms.ModelForm):
     class Meta:
         model = Type
+        exclude = ()
 
 
 class AuthorForm(DisplayableForm):
     class Meta:
         model = Author
+        exclude = ()
 
 
 class TinyMceWidget(forms.Textarea):

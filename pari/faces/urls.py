@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, url
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from pari.faces.views import FaceList, FaceDetail
 
 urlpatterns = patterns('pari.faces.views',
@@ -7,5 +6,3 @@ urlpatterns = patterns('pari.faces.views',
                            name='face-detail'),
                        url(r'^$', FaceList.as_view(), name='face-list'),
                        )
-
-urlpatterns += staticfiles_urlpatterns()

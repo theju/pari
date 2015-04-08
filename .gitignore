@@ -46,3 +46,5 @@ nosetests.xml
 
 # EMacs
 *~
+
+pari/settings/whoosh_index/

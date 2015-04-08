@@ -1,4 +1,0 @@
--r base.txt
-
-pylibmc==1.2.3
-djrill==0.6.0

@@ -8,6 +8,9 @@ from mezzanine.generic.fields import CommentsField
 from pari.article.models import Article
 
 
+def get_all_articles():
+    return Article.articles.all()
+
 class NewsPost(Displayable, Ownable, RichText):
     categories = models.ManyToManyField("NewsCategory", verbose_name=_("News Category"),
                                         blank=True, related_name="news_posts")
@@ -38,11 +41,13 @@ class NewsCategory(Slugged):
 
 
 class LatestArticle(models.Model):
-    new_current_articles = models.ManyToManyField(Article, limit_choices_to={'id__in': Article.articles.all()},
+    new_current_articles = models.ManyToManyField(Article,
+                                                  limit_choices_to={'id__in': get_all_articles},
                                                   blank=True,
                                                   verbose_name=_("New current articles"),
                                                   related_name='new_current_articles')
-    new_archive_articles = models.ManyToManyField(Article, limit_choices_to={'id__in': Article.articles.all()},
+    new_archive_articles = models.ManyToManyField(Article,
+                                                  limit_choices_to={'id__in': get_all_articles},
                                                   blank=True,
                                                   verbose_name=_("New archive articles"),
                                                   related_name='new_archive_articles')

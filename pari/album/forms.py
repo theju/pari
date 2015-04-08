@@ -49,3 +49,4 @@ class AlbumForm(DisplayableForm):
 
     class Meta:
         model = Album
+        exclude = ()

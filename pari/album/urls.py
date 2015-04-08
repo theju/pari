@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, url
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from pari.album.models import get_all_albums, get_other_albums, get_talking_albums
 from pari.album.views import AlbumDetail, AlbumList, AlbumImageDetail, ImageCollectionImageList
@@ -14,5 +13,3 @@ urlpatterns = patterns('pari.album.views',
                        url(r'^(?P<slug>.+)/(?P<order>\d+)$', AlbumImageDetail.as_view(), name='album-image-detail'),
                        url(r'^(?P<slug>.+)/all$', ImageCollectionImageList.as_view(), name='image-collection-image-list'),
                        )
-
-urlpatterns += staticfiles_urlpatterns()

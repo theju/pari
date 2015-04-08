@@ -21,8 +21,7 @@ DATABASES = {
 }
 
 INSTALLED_APPS += (
-    "django_nose",
-    "debug_toolbar",
+#    "debug_toolbar",
     "django_extensions",
 )
 

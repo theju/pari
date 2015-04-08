@@ -1,7 +1,0 @@
-#!/bin/sh
-
-#restart gunicorn
-supervisorctl restart gunicorn_pari
-
-#restart memcached
-/etc/init.d/memcached restart

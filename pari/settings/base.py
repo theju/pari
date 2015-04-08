@@ -57,12 +57,6 @@ DASHBOARD_TAGS = (
 # ``django.models.db.`` can be omitted for regular Django model fields.
 #
 EXTRA_MODEL_FIELDS = (
-    (
-        "mezzanine.pages.models.Link.html_class",
-        "CharField",
-        ("HTML Class",),
-        {"max_length": 100, "blank": True, "null": True, "default": ""},
-    ),
 )
 
 FORMS_EXTRA_FIELDS = (
@@ -76,10 +70,6 @@ FORMS_EXTRA_FIELDS = (
 # Setting to turn on featured images for blog posts. Defaults to False.
 #
 BLOG_USE_FEATURED_IMAGE = True
-
-# If True, the south application will be automatically added to the
-# INSTALLED_APPS setting.
-USE_SOUTH = True
 
 BLOG_SLUG = "article"
 
@@ -107,7 +97,6 @@ RECAPTCHA_PRIVATE_KEY = '6LdQguISAAAAAJgLhCqkCNbjkhG1J9_2Q2kLEsAO'
 AUTH_PROFILE_MODULE = "user.Profile"
 ACCOUNTS_VERIFICATION_REQUIRED = True
 
-SSL_FORCE_URL_PREFIXES = ("/admin", "/account", "/donate", "/asset_proxy")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
 SEARCH_MODEL_CHOICES = (
@@ -165,6 +154,7 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
+USE_L10N = True
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "ddd8bef6-495d-4925-ae37-1f13f9fe679404584f84-f4db-4f15-a096-72f545486dc6a72928ae-ef6b-486a-86a0-d511c82c5534"
@@ -281,7 +271,7 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 # Don't forget to use absolute paths, not relative paths.
 TEMPLATE_DIRS = (PROJECT_ROOT.child("templates"), )
 
-FIXTURE_DIRS = PROJECT_ROOT.child("fixtures")
+#FIXTURE_DIRS = PROJECT_ROOT.child("fixtures")
 
 
 ################
@@ -313,12 +303,8 @@ INSTALLED_APPS = (
     "mezzanine.accounts",
     # "mezzanine.mobile",
 
-    "south",
     "geoposition",
-    "rest_framework",
     "compressor",
-    'dajaxice',
-    'dajax',
     "captcha",
     "haystack",
     # Custom
@@ -334,6 +320,33 @@ INSTALLED_APPS = (
     "pari.thirdparty"
 )
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                "django.core.context_processors.debug",
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.static",
+                "django.core.context_processors.media",
+                "django.core.context_processors.request",
+                "django.core.context_processors.tz",
+                "mezzanine.conf.context_processors.settings",
+                "mezzanine.pages.context_processors.page",
+                "pari.article.context_processors.types",
+                "pari.article.context_processors.sites",
+            ],
+        },
+    },
+]
+
+# TODO: Remove the below attributes. Deprecated in django 1.8
 # List of processors used by RequestContext to populate the context.
 # Each one should be a callable that takes the request object as its
 # only parameter and returns a dictionary to add to the context.
@@ -373,6 +386,8 @@ MIDDLEWARE_CLASSES = (
     "mezzanine.core.middleware.SSLRedirectMiddleware",
     "mezzanine.pages.middleware.PageMiddleware",
     "mezzanine.core.middleware.FetchFromCacheMiddleware",
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 )
 
 # Store these package names here as they may change in the future since

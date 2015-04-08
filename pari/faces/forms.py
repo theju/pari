@@ -7,11 +7,13 @@ from pari.faces.models import District, Face
 class DistrictForm(forms.ModelForm):
     class Meta:
         model = District
+        exclude = ()
 
 
 class FaceForm(forms.ModelForm):
     class Meta:
         model = Face
+        exclude = ()
 
 
 class FaceImageInlineFormset(forms.models.BaseInlineFormSet):

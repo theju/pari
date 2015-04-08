@@ -1,179 +1,115 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import mezzanine.core.managers
+import mezzanine.core.fields
+import pari.article.mixins.admin_thumb
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Face'
-        db.create_table(u'faces_face', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('keywords_string', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('slug', self.gf('django.db.models.fields.CharField')(max_length=2000, null=True, blank=True)),
-            ('_meta_title', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('gen_description', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('status', self.gf('django.db.models.fields.IntegerField')(default=2)),
-            ('publish_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('expiry_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('short_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
-            ('in_sitemap', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('_order', self.gf('django.db.models.fields.IntegerField')(null=True)),
-            ('zip_import', self.gf('django.db.models.fields.files.FileField')(max_length=100, blank=True)),
-            ('image_collection', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['album.ImageCollection'])),
-            ('district', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            #('keywords', self.gf('mezzanine.generic.fields.KeywordsField')(object_id_field='object_pk', to=orm['generic.AssignedKeyword'], frozen_by_south=True)),
-        ))
-        db.send_create_signal(u'faces', ['Face'])
+    dependencies = [
+        ('sites', '0001_initial'),
+        ('album', '0001_initial'),
+    ]
 
-        # Adding model 'FaceImage'
-        db.create_table(u'faces_faceimage', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('keywords_string', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
-            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('slug', self.gf('django.db.models.fields.CharField')(max_length=2000, null=True, blank=True)),
-            ('_meta_title', self.gf('django.db.models.fields.CharField')(max_length=500, null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('gen_description', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('status', self.gf('django.db.models.fields.IntegerField')(default=2)),
-            ('publish_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('expiry_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('short_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
-            ('in_sitemap', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('_order', self.gf('django.db.models.fields.IntegerField')(null=True)),
-            ('face', self.gf('django.db.models.fields.related.ForeignKey')(related_name='images', to=orm['faces.Face'])),
-            ('image_collection_image', self.gf('django.db.models.fields.related.ForeignKey')(related_name='face_image', to=orm['album.ImageCollectionImage'])),
-            ('is_cover', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('image_file', self.gf('mezzanine.core.fields.FileField')(max_length=200, null=True)),
-            # ('keywords', self.gf('mezzanine.generic.fields.KeywordsField')(object_id_field='object_pk', to=orm['generic.AssignedKeyword'], frozen_by_south=True)),
-        ))
-        db.send_create_signal('faces', ['FaceImage'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Face'
-        db.delete_table(u'faces_face')
-
-        # Deleting model 'FaceImage'
-        db.delete_table(u'faces_faceimage')
-
-
-    models = {
-        'album.imagecollection': {
-            'Meta': {'object_name': 'ImageCollection'},
-            '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            # 'keywords': ('mezzanine.generic.fields.KeywordsField', [], {'object_id_field': "'object_pk'", 'to': u"orm['generic.AssignedKeyword']", 'frozen_by_south': 'True'}),
-            'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
-            'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'zip_import': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'blank': 'True'})
-        },
-        'album.imagecollectionimage': {
-            'Meta': {'ordering': "('_order',)", 'object_name': 'ImageCollectionImage'},
-            '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            '_order': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'file': ('mezzanine.core.fields.FileField', [], {'max_length': '200'}),
-            'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image_collection': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['album.ImageCollection']"}),
-            'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            # 'keywords': ('mezzanine.generic.fields.KeywordsField', [], {'object_id_field': "'object_pk'", 'to': u"orm['generic.AssignedKeyword']", 'frozen_by_south': 'True'}),
-            'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
-            'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '500'})
-        },
-        u'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'faces.face': {
-            'Meta': {'ordering': "('_order',)", 'object_name': 'Face'},
-            '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            '_order': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'district': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image_collection': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['album.ImageCollection']"}),
-            'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            # 'keywords': ('mezzanine.generic.fields.KeywordsField', [], {'object_id_field': "'object_pk'", 'to': u"orm['generic.AssignedKeyword']", 'frozen_by_south': 'True'}),
-            'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
-            'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'zip_import': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'blank': 'True'})
-        },
-        'faces.faceimage': {
-            'Meta': {'ordering': "('_order',)", 'object_name': 'FaceImage'},
-            '_meta_title': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'}),
-            '_order': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'expiry_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'face': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': u"orm['faces.Face']"}),
-            'gen_description': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image_collection_image': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'face_image'", 'to': "orm['album.ImageCollectionImage']"}),
-            'image_file': ('mezzanine.core.fields.FileField', [], {'max_length': '200', 'null': 'True'}),
-            'in_sitemap': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_cover': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            # 'keywords': ('mezzanine.generic.fields.KeywordsField', [], {'object_id_field': "'object_pk'", 'to': u"orm['generic.AssignedKeyword']", 'frozen_by_south': 'True'}),
-            'keywords_string': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
-            'publish_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'short_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '500'})
-        },
-        u'generic.assignedkeyword': {
-            'Meta': {'ordering': "('_order',)", 'object_name': 'AssignedKeyword'},
-            '_order': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'keyword': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'assignments'", 'to': u"orm['generic.Keyword']"}),
-            'object_pk': ('django.db.models.fields.IntegerField', [], {})
-        },
-        u'generic.keyword': {
-            'Meta': {'object_name': 'Keyword'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '500'})
-        },
-        u'sites.site': {
-            'Meta': {'ordering': "('domain',)", 'object_name': 'Site', 'db_table': "'django_site'"},
-            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        }
-    }
-
-    complete_apps = ['faces']
+    operations = [
+        migrations.CreateModel(
+            name='District',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('keywords_string', models.CharField(max_length=500, editable=False, blank=True)),
+                ('title', models.CharField(max_length=500, verbose_name='Title')),
+                ('slug', models.CharField(help_text='Leave blank to have the URL auto-generated from the title.', max_length=2000, null=True, verbose_name='URL', blank=True)),
+                ('_meta_title', models.CharField(help_text='Optional title to be used in the HTML title tag. If left blank, the main title field will be used.', max_length=500, null=True, verbose_name='Title', blank=True)),
+                ('description', models.TextField(verbose_name='Description', blank=True)),
+                ('gen_description', models.BooleanField(default=True, help_text='If checked, the description will be automatically generated from content. Uncheck if you want to manually set a custom description.', verbose_name='Generate description')),
+                ('created', models.DateTimeField(null=True, editable=False)),
+                ('updated', models.DateTimeField(null=True, editable=False)),
+                ('status', models.IntegerField(default=2, help_text='With Draft chosen, will only be shown for admin users on the site.', verbose_name='Status', choices=[(1, 'Draft'), (2, 'Published')])),
+                ('publish_date', models.DateTimeField(help_text="With Published chosen, won't be shown until this time", null=True, verbose_name='Published from', blank=True)),
+                ('expiry_date', models.DateTimeField(help_text="With Published chosen, won't be shown after this time", null=True, verbose_name='Expires on', blank=True)),
+                ('short_url', models.URLField(null=True, blank=True)),
+                ('in_sitemap', models.BooleanField(default=True, verbose_name='Show in sitemap')),
+                ('district', models.CharField(unique=True, max_length=100, verbose_name='District')),
+                ('district_description', models.CharField(max_length=255, null=True, verbose_name='Description(Optional)', blank=True)),
+                ('site', models.ForeignKey(editable=False, to='sites.Site')),
+            ],
+            options={
+                'ordering': ('district',),
+                'verbose_name': 'District',
+                'verbose_name_plural': 'Districts',
+            },
+            managers=[
+                (b'objects', mezzanine.core.managers.DisplayableManager()),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Face',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('keywords_string', models.CharField(max_length=500, editable=False, blank=True)),
+                ('title', models.CharField(max_length=500, verbose_name='Title')),
+                ('slug', models.CharField(help_text='Leave blank to have the URL auto-generated from the title.', max_length=2000, null=True, verbose_name='URL', blank=True)),
+                ('_meta_title', models.CharField(help_text='Optional title to be used in the HTML title tag. If left blank, the main title field will be used.', max_length=500, null=True, verbose_name='Title', blank=True)),
+                ('description', models.TextField(verbose_name='Description', blank=True)),
+                ('gen_description', models.BooleanField(default=True, help_text='If checked, the description will be automatically generated from content. Uncheck if you want to manually set a custom description.', verbose_name='Generate description')),
+                ('created', models.DateTimeField(null=True, editable=False)),
+                ('updated', models.DateTimeField(null=True, editable=False)),
+                ('status', models.IntegerField(default=2, help_text='With Draft chosen, will only be shown for admin users on the site.', verbose_name='Status', choices=[(1, 'Draft'), (2, 'Published')])),
+                ('publish_date', models.DateTimeField(help_text="With Published chosen, won't be shown until this time", null=True, verbose_name='Published from', blank=True)),
+                ('expiry_date', models.DateTimeField(help_text="With Published chosen, won't be shown after this time", null=True, verbose_name='Expires on', blank=True)),
+                ('short_url', models.URLField(null=True, blank=True)),
+                ('in_sitemap', models.BooleanField(default=True, verbose_name='Show in sitemap')),
+                ('_order', mezzanine.core.fields.OrderField(null=True, verbose_name='Order')),
+                ('zip_import', models.FileField(help_text="Upload a zip file containing images, and they'll be imported into this gallery.", upload_to=b'faces', verbose_name='Zip import', blank=True)),
+                ('is_pinned', models.BooleanField(default=False, verbose_name=b'Pin To Top')),
+                ('district', models.ForeignKey(to='faces.District', null=True)),
+                ('image_collection', models.ForeignKey(to='album.ImageCollection')),
+                ('site', models.ForeignKey(editable=False, to='sites.Site')),
+            ],
+            options={
+                'ordering': ('district',),
+                'verbose_name': 'Face',
+                'verbose_name_plural': 'Faces',
+            },
+            bases=(models.Model, pari.article.mixins.admin_thumb.AdminThumbMixin),
+            managers=[
+                (b'objects', mezzanine.core.managers.DisplayableManager()),
+            ],
+        ),
+        migrations.CreateModel(
+            name='FaceImage',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('keywords_string', models.CharField(max_length=500, editable=False, blank=True)),
+                ('title', models.CharField(max_length=500, verbose_name='Title')),
+                ('slug', models.CharField(help_text='Leave blank to have the URL auto-generated from the title.', max_length=2000, null=True, verbose_name='URL', blank=True)),
+                ('_meta_title', models.CharField(help_text='Optional title to be used in the HTML title tag. If left blank, the main title field will be used.', max_length=500, null=True, verbose_name='Title', blank=True)),
+                ('description', models.TextField(verbose_name='Description', blank=True)),
+                ('gen_description', models.BooleanField(default=True, help_text='If checked, the description will be automatically generated from content. Uncheck if you want to manually set a custom description.', verbose_name='Generate description')),
+                ('created', models.DateTimeField(null=True, editable=False)),
+                ('updated', models.DateTimeField(null=True, editable=False)),
+                ('status', models.IntegerField(default=2, help_text='With Draft chosen, will only be shown for admin users on the site.', verbose_name='Status', choices=[(1, 'Draft'), (2, 'Published')])),
+                ('publish_date', models.DateTimeField(help_text="With Published chosen, won't be shown until this time", null=True, verbose_name='Published from', blank=True)),
+                ('expiry_date', models.DateTimeField(help_text="With Published chosen, won't be shown after this time", null=True, verbose_name='Expires on', blank=True)),
+                ('short_url', models.URLField(null=True, blank=True)),
+                ('in_sitemap', models.BooleanField(default=True, verbose_name='Show in sitemap')),
+                ('_order', mezzanine.core.fields.OrderField(null=True, verbose_name='Order')),
+                ('is_pinned', models.BooleanField(default=False, verbose_name=b'Pin To Top')),
+                ('image_file', mezzanine.core.fields.FileField(max_length=200, null=True, verbose_name='File')),
+                ('face', models.ForeignKey(related_name='images', to='faces.Face')),
+                ('image_collection_image', models.ForeignKey(related_name='face_image', to='album.ImageCollectionImage')),
+                ('site', models.ForeignKey(editable=False, to='sites.Site')),
+            ],
+            options={
+                'ordering': ('_order',),
+                'verbose_name': 'FaceImage',
+                'verbose_name_plural': 'FaceImages',
+            },
+            managers=[
+                (b'objects', mezzanine.core.managers.DisplayableManager()),
+            ],
+        ),
+    ]

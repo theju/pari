@@ -9,3 +9,4 @@ class ContributionForm(DisplayableForm):
 
     class Meta:
         model = Contribution
+        exclude = ()

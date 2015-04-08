@@ -5,8 +5,6 @@ DEBUG = True
 
 COMPRESS_ENABLED = False
 
-SOUTH_TESTS_MIGRATE = False
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -17,12 +15,6 @@ DATABASES = {
         "PORT": "",
     }
 }
-
-INSTALLED_APPS += (
-    "django_nose",
-)
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 SOUND_CLOUD_CLIENT_SECRET = '4413528c126613cd9535b318241ed24d'
 SOUND_CLOUD_CLIENT_ID = 'f63f72df4a0eb0606e3c7aaf12d8241b'

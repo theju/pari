@@ -3,16 +3,11 @@ import os
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
-
-from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from .sites import PariAdminSite
 
-from pari.article.urls import root_patterns as articles_root_patterns
-
 admin.autodiscover()
-
-dajaxice_autodiscover()
 
 pari_site = PariAdminSite()
 pari_site._registry = admin.site._registry
@@ -22,8 +17,6 @@ pari_site._registry = admin.site._registry
 # to the project's homepage.
 
 urlpatterns = patterns("",
-
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 
     url(r'^map/', include('pari.map.urls')),
     url(r'^albums/', include('pari.album.urls')),
@@ -35,7 +28,7 @@ urlpatterns = patterns("",
     url(r'^feeds/', include('pari.article.feed_urls')),
 
 
-    url(r'^', include(articles_root_patterns)),
+    url(r'^', include('pari.article.urls')),
     url(r'^article/', include('pari.article.urls')),
 
 
@@ -121,10 +114,7 @@ if os.environ['DJANGO_SETTINGS_MODULE'] != 'pari.settings.ci':
         (r'^search/', include('haystack.urls')),
     )
 
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    )
+urlpatterns += staticfiles_urlpatterns()
 
 # Adds ``STATIC_URL`` to the context of error pages, so that error
 # pages can use JS, CSS and images.

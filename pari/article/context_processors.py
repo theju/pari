@@ -1,5 +1,5 @@
 from .models import Type
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.requests import RequestSite
 
 
 def types(request):

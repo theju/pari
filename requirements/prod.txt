@@ -1,4 +1,5 @@
 -r base.txt
 
 pylibmc==1.2.3
-djrill==0.6.0
+djrill==1.3.0
+pyelasticsearch==1.2

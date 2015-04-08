@@ -13,3 +13,4 @@ class ResourceForm(forms.ModelForm):
 
     class Meta:
         model = Resource
+        exclude = ()
