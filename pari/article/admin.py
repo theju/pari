@@ -5,6 +5,7 @@ from modeltranslation.admin import TabbedTranslationAdmin
 
 from mezzanine.blog.admin import BlogPostAdmin
 from mezzanine.core.admin import DisplayableAdmin, TabularDynamicInlineAdmin
+from mezzanine.core.models import CONTENT_STATUS_DRAFT
 
 from .models import Article, ArticleCarouselImage, Location, Category, Type, Author
 from .forms import LocationForm, CategoryForm, TypeForm, AuthorForm
@@ -50,6 +51,12 @@ class ArticleAdmin(BlogPostAdmin, TabbedTranslationAdmin):
     def __init__(self, *args):
         super(ArticleAdmin, self).__init__(*args)
         self.opts.get_field("user").verbose_name = 'User'
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ArticleAdmin, self).get_form(request, obj, **kwargs)
+        if not obj:
+            form.base_fields['status'].initial = CONTENT_STATUS_DRAFT
+        return form
 
 
 class TypeAdmin(admin.ModelAdmin):

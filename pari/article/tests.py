@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from mezzanine.core.models import CONTENT_STATUS_DRAFT
+from mezzanine.core.models import CONTENT_STATUS_DRAFT, CONTENT_STATUS_PUBLISHED
 from mezzanine.conf import settings
 
 import factory
@@ -510,7 +510,7 @@ class FeedTests(TestCase):
             user=user_1,
             author=author_1,
             content="<div>Content</div>",
-            status=2
+            status=CONTENT_STATUS_PUBLISHED
         )
         Article.objects.create(
             title='Article Drafted',
