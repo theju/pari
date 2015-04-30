@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
-{% load pages_tags mezzanine_tags i18n future dajaxice_templatetags article_filters %}
+{% load pages_tags mezzanine_tags i18n future article_filters %}
 {% load static from staticfiles %}
 <head>
 
@@ -124,8 +124,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   {% block extra_uncompressed_js %}{% endblock %}
   {% compress js %}
     <script src="{{ STATIC_URL }}bootstrap-3.1.1/js/bootstrap.min.js"></script>
-    {% dajaxice_js_import %}
-    <script src="{{ STATIC_URL }}dajax/jquery.dajax.core.js"></script>
     <script>
     $(function() {
         $('.middleinput:text, textarea').addClass('xlarge');
